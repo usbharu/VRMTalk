@@ -1,0 +1,9 @@
+﻿{
+  "name": "usbharu.unity.VRMTalk",
+  "displayName": "VRMTalk",
+  "description": "Can talk vrm mouth",
+  "version": "0.0.1",
+  "dependencies": {
+    "com.vrmc.univrm": "0.88.0",
+  }
+}
