@@ -57,11 +57,15 @@ namespace VRMTalk
             for (int i = 0; i < vowel.Length; i++)
             {
                 int vowelIndex = VRMTalkUtility.VowelIndexOf(vowel[i]);
+
+                animationCurves[vowelIndex].AddKey(nowTime , 0f);
+                nowTime += 0.5f;
                 animationCurves[vowelIndex].AddKey(nowTime,100f);
-                animationCurves[vowelIndex].AddKey(nowTime + baseTime, 0f);
-                nowTime += (0.5f + 0.2f);
+                nowTime += 0.2f;
+                animationCurves[vowelIndex].AddKey(nowTime , 0f);
             }
 
+            //すべてのKeyFrameのTangentModeをClampedAutoに変更
             foreach (var animationCurve in animationCurves)
             {
                 VRMTalkUtility.ChangeAllTangentMode(animationCurve,AnimationUtility.TangentMode.ClampedAuto);

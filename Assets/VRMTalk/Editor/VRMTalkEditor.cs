@@ -19,6 +19,12 @@ namespace VRMTalk
         private VRMMetaObject VrmMeta;
         private Texture2D thumbnail;
         private Vector2 scrollPos;
+        private SkinnedMeshRenderer _skinnedMeshRenderer;
+
+        private int selectedBlendShapeIndex;
+        private float selectedBlendShapeWeigth;
+
+        private string[] BlendShapeKeys;
         
         private AnimationCurvePair[] _animationCurvePair = Array.Empty<AnimationCurvePair>();
         //test
@@ -53,6 +59,10 @@ namespace VRMTalk
                         VRMTalk.WriteBlendShapeToClip(_vrmTalkClip,vrm);
                         SaveClip();
                     }
+
+                    selectedBlendShapeIndex =
+                        EditorGUILayout.Popup("Preview BlendShape", selectedBlendShapeIndex, BlendShapeKeys);
+                    _skinnedMeshRenderer.SetBlendShapeWeight(selectedBlendShapeIndex,EditorGUILayout.Slider("BlendShapeWeight",_skinnedMeshRenderer.GetBlendShapeWeight(selectedBlendShapeIndex),0f,100f));
                 }
 
                 GUILayout.Box(thumbnail,GUILayout.Width(150f),GUILayout.Height(150f));
@@ -129,6 +139,13 @@ namespace VRMTalk
 
             VrmMeta = vrm.GetComponent<VRMMeta>().Meta;
             thumbnail = VrmMeta.Thumbnail;
+
+            _skinnedMeshRenderer = vrm.GetComponentInChildren<SkinnedMeshRenderer>();
+            BlendShapeKeys = new string[_skinnedMeshRenderer.sharedMesh.blendShapeCount];
+            for (var i = 0; i < BlendShapeKeys.Length; i++)
+            {
+                BlendShapeKeys[i] = _skinnedMeshRenderer.sharedMesh.GetBlendShapeName(i);
+            }
         }
 
         void initClip()
