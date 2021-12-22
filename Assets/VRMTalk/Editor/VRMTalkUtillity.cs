@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 using VRM;
 
@@ -168,6 +169,15 @@ namespace VRMTalk
             }
 
             return null;
+        }
+
+        public static void ChangeAllTangentMode(AnimationCurve animationCurve, AnimationUtility.TangentMode tangentMode)
+        {
+            for (int i = 0; i < animationCurve.keys.Length; i++)
+            {
+                AnimationUtility.SetKeyLeftTangentMode(animationCurve,i,tangentMode);
+                AnimationUtility.SetKeyRightTangentMode(animationCurve,i,tangentMode);
+            }
         }
     }
 }

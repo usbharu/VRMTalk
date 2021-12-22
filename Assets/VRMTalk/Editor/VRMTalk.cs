@@ -58,11 +58,13 @@ namespace VRMTalk
             {
                 int vowelIndex = VRMTalkUtility.VowelIndexOf(vowel[i]);
                 animationCurves[vowelIndex].AddKey(nowTime,100f);
-                Debug.Log("Now Time : "+nowTime);
-                Debug.Log("Add key : 100f");
                 animationCurves[vowelIndex].AddKey(nowTime + baseTime, 0f);
-                Debug.Log("Add key : 0f");
                 nowTime += (0.5f + 0.2f);
+            }
+
+            foreach (var animationCurve in animationCurves)
+            {
+                VRMTalkUtility.ChangeAllTangentMode(animationCurve,AnimationUtility.TangentMode.ClampedAuto);
             }
         }
     }
