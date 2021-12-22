@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using VRM;
 
@@ -19,7 +20,7 @@ namespace VRMTalk
             {
                 AnimationCurvePair pair = new AnimationCurvePair();
                 pair.key = blendShapeName;
-                pair.animationCurve = AnimationCurve.Linear(vrmTalkClip.clipBegin,1f,vrmTalkClip.clipEnd,1f);
+                pair.animationCurve = AnimationCurve.Linear(vrmTalkClip.clipBegin,0f,vrmTalkClip.clipEnd,0f);
                 vrmTalkClip.animationCurveList.Add(pair);
             }
         }
@@ -33,6 +34,35 @@ namespace VRMTalk
             foreach (var t in vrmTalkClip.animationCurveList)
             {
                 WriteAnimationCurveToAnimationClip(t.animationCurve,"blendShape."+t.key,animationClip);
+            }
+        }
+
+        /**
+         * <summary>母音から口の<c>BlendShape</c>の<c>AnimationCurve</c>を生成する</summary>
+         * <param name="animationCurves">
+         * [0] BlendShape a
+         * [1] BlendShape i
+         * [2] BlendShape u
+         * [3] BlendShape e
+         * [4] BlendShape o
+         * [5] BlendShape Neutral
+         * </param>
+         * <param name="vowel">生成する母音</param>
+         */
+        public static void GenerationTalkBlendShapeAnimationCurve(AnimationCurve[] animationCurves,string vowel)
+        {
+            float baseTime = 0.5f;
+            float gapTime = 0.2f;
+            float nowTime = 0.1f;
+            for (int i = 0; i < vowel.Length; i++)
+            {
+                int vowelIndex = VRMTalkUtility.VowelIndexOf(vowel[i]);
+                animationCurves[vowelIndex].AddKey(nowTime,100f);
+                Debug.Log("Now Time : "+nowTime);
+                Debug.Log("Add key : 100f");
+                animationCurves[vowelIndex].AddKey(nowTime + baseTime, 0f);
+                Debug.Log("Add key : 0f");
+                nowTime += (0.5f + 0.2f);
             }
         }
     }

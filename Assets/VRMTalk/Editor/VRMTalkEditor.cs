@@ -63,7 +63,7 @@ namespace VRMTalk
             initClip();
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("New Clip"))
+                if (GUILayout.Button("New Clip (Disabled)"))
                 {
                     
                 }
@@ -73,7 +73,7 @@ namespace VRMTalk
                     SaveClip();
                 }
 
-                if (GUILayout.Button("Save As Clip"))
+                if (GUILayout.Button("Save As Clip (Disabled)"))
                 {
                     
                 }
@@ -92,7 +92,16 @@ namespace VRMTalk
             VRMTalkEditorUtillity.Separator();
             if (_vrmTalkClip !=null)
             {
-                _vrmTalkClip.talkScript = EditorGUILayout.TextField("talk script", _vrmTalkClip.talkScript);
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    _vrmTalkClip.talkScript = EditorGUILayout.TextField("talk script", _vrmTalkClip.talkScript);
+                    if (GUILayout.Button("Generation"))
+                    {
+                        GenerationBlendShape();
+                    }
+                }
+
+                Debug.Log(VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
             }
 
             using (new EditorGUILayout.VerticalScope())
@@ -159,6 +168,20 @@ namespace VRMTalk
             }
             VRMTalk.WriteVRMTalkClipToAnimationClip(_vrmTalkClip,_animationClip);
             Debug.Log("write clip : "+ _animationClip);
+        }
+
+        void GenerationBlendShape()
+        {
+            AnimationCurve[] animationCurves = new AnimationCurve[6];
+            animationCurves[0] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_A");
+            animationCurves[1] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_I");
+            animationCurves[2] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_U");
+            animationCurves[3] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_E");
+            animationCurves[4] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_O");
+            animationCurves[5] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_ALL_Neutral");
+            VRMTalk.GenerationTalkBlendShapeAnimationCurve(animationCurves,
+                VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
+            Debug.Log("Generation BlendShape");
         }
 
     }

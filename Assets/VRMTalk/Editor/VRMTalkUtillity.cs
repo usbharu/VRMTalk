@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using UnityEngine;
 using VRM;
 
@@ -65,17 +66,108 @@ namespace VRMTalk
             'ﾝ',
         };
 
+        public static readonly char[] VowelsChars =
+        {
+            'あ', 'い', 'う', 'え', 'お', 'ん',
+        };
+
         public static char CharacterUnification(char character)
         {
             for (int i = 0; i < FullWidthKanaChars.Length; i++)
             {
-                if (FullWidthKanaChars[i] == character||HalfWidthKanaChars[i]==character)
+                if (FullWidthKanaChars[i] == character||HalfWidthKanaChars[i]==character||HiraganaChars[i]==character)
                 {
                     return HiraganaChars[i];
                 }
             }
 
+            return character;
+        }
+
+        public static string StringUnification(string s)
+        {
+            StringBuilder returnValue= new StringBuilder();
+            foreach (var c in s)
+            {
+                returnValue.Append(CharacterUnification(c));
+            }
+
+            return returnValue.ToString();
+        }
+
+        public static char ConvertFromHiraganaToVowels(char character)
+        {
+            if (character == 'ん')
+            {
+                return 'ん';
+            }
+            for (int i = 0; i < HiraganaChars.Length; i++)
+            {
+                if (HiraganaChars[i]==character)
+                {
+                    return VowelsChars[i % 5];
+                }
+            }
+
             throw new ArgumentException();
+        }
+
+        public static string ConvertFromHiraganaToVowels(string s)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var t in s)
+            {
+                try
+                {
+                    stringBuilder.Append(ConvertFromHiraganaToVowels(t));
+                }
+                catch (ArgumentException e)
+                {
+                    Debug.LogWarning("Contains characters that cannot be used.");
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public static bool IsVowel(char character)
+        {
+            character = CharacterUnification(character);
+            foreach (char c in VowelsChars)
+            {
+                if (character == c)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static int VowelIndexOf(char character)
+        {
+            for (int i = 0; i < VowelsChars.Length; i++)
+            {
+                if (VowelsChars[i]==character)
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException(character+" is not vowel");
+        }
+
+        public static AnimationCurve AnimationCurvePair(AnimationCurvePair[] animationCurvePairs, string key)
+        {
+            foreach (var animationCurvePair in animationCurvePairs)
+            {
+                if (animationCurvePair.key.Equals(key))
+                {
+                    return animationCurvePair.animationCurve;
+                }
+            }
+
+            return null;
         }
     }
 }
