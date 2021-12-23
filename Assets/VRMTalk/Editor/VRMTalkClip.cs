@@ -6,7 +6,7 @@ namespace VRMTalk.Editor
     [CreateAssetMenu(fileName = "VRMTalkClip",menuName = "VRMTalk/CreateVRMTalkClip")]
     public class VRMTalkClip : ScriptableObject
     {
-        [SerializeField] public float clipBegin = 0f;
+        [SerializeField] public float clipBegin;
         [SerializeField] public float clipEnd = 10f;
         [SerializeField] public string talkScript = "";
         [SerializeField] public List<AnimationCurvePair> animationCurveList = new List<AnimationCurvePair>();

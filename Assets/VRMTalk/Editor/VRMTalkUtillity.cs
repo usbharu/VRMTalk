@@ -134,7 +134,7 @@ namespace VRMTalk.Editor
                 {
                     stringBuilder.Append(ConvertFromHiraganaToVowels(t));
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     Debug.LogWarning("Contains characters that cannot be used.");
                 }

@@ -38,7 +38,7 @@ namespace VRMTalk.Editor
         private void Awake()
         {
             vrm = FindObjectOfType<VRMMeta>();
-            VrmMeta = vrm?.Meta;
+            VrmMeta = vrm != null ? vrm.Meta : null;
         }
 
         private void OnGUI()
@@ -124,7 +124,10 @@ namespace VRMTalk.Editor
                             t.animationCurve);
                     }
 
-                    GUILayoutUtility.GetRect(_vrmTalkClip?.clipEnd - _vrmTalkClip?.clipBegin ?? 0, 1);
+                    if (_vrmTalkClip != null)
+                    {
+                        GUILayoutUtility.GetRect(_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin, 1);
+                    }
                 }
             }
         }
