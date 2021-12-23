@@ -105,13 +105,12 @@ namespace VRMTalk
                 using (new EditorGUILayout.VerticalScope())
                 {
                     _vrmTalkClip.talkScript = EditorGUILayout.TextField("talk script", _vrmTalkClip.talkScript);
+                    EditorGUILayout.LabelField(VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
                     if (GUILayout.Button("Generation"))
                     {
                         GenerationBlendShape();
                     }
                 }
-
-                Debug.Log(VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
             }
 
             using (new EditorGUILayout.VerticalScope())
