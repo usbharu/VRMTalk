@@ -16,7 +16,7 @@ namespace VRMTalk.Editor
         private SkinnedMeshRenderer _skinnedMeshRenderer;
 
         private int selectedBlendShapeIndex;
-        private float selectedBlendShapeWeigth;
+        private float selectedBlendShapeWeight;
 
         private string[] BlendShapeKeys;
         
