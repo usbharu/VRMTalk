@@ -202,8 +202,9 @@ namespace VRMTalk
             animationCurves[3] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_e);
             animationCurves[4] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_o);
             animationCurves[5] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_Neutral);
-            VRMTalk.GenerationTalkBlendShapeAnimationCurve(animationCurves,
-                VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
+            string vowel =
+                VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript));
+            new DefaultVRMTalkGenerateTalkBlendShapeCurve().GenerateTalkBlendShapeCurve(animationCurves,vowel);
             Debug.Log("Generation BlendShape");
         }
 

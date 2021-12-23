@@ -49,6 +49,7 @@ namespace VRMTalk
          * </param>
          * <param name="vowel">生成する母音</param>
          */
+        [Obsolete]
         public static void GenerationTalkBlendShapeAnimationCurve(AnimationCurve[] animationCurves,string vowel)
         {
             float baseTime = 0.5f;
