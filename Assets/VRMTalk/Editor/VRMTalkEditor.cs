@@ -25,6 +25,8 @@ namespace VRMTalk.Editor
         private AnimationClip _animationClip; 
         //test
 
+        private IVRMTalkGenerateTalkBlendShapeCurve VrmTalkGenerateTalkBlendShapeCurve;
+        
         private TalkBlendShapeKeyName _talkBlendShapeKeyName;
         
         [MenuItem("VRMTalk/TalkEditor")]
@@ -200,7 +202,11 @@ namespace VRMTalk.Editor
             animationCurves[5] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_Neutral);
             string vowel =
                 VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript));
-            new DefaultVRMTalkGenerateTalkBlendShapeCurve().GenerateTalkBlendShapeCurve(animationCurves,vowel);
+            if (VrmTalkGenerateTalkBlendShapeCurve==null)
+            {
+                VrmTalkGenerateTalkBlendShapeCurve = new DefaultVRMTalkGenerateTalkBlendShapeCurve();
+            }
+            VrmTalkGenerateTalkBlendShapeCurve.GenerateTalkBlendShapeCurve(animationCurves,vowel);
             Debug.Log("Generation BlendShape");
         }
 
