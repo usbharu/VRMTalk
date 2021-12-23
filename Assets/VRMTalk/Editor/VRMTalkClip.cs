@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "VRMTalkClip",menuName = "VRMTalk/CreateVRMTalkClip")]
 public class VRMTalkClip : ScriptableObject

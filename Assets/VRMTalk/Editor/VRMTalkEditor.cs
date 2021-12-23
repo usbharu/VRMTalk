@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Reflection;
-// using Editor;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UIElements;
 using VRM;
-using Button = UnityEngine.UI.Button;
-using Object = UnityEngine.Object;
 
 namespace VRMTalk
 {
