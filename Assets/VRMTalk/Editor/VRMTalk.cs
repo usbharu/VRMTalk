@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using VRM;
 
-namespace VRMTalk
+namespace VRMTalk.Editor
 {
     public class VRMTalk
     {

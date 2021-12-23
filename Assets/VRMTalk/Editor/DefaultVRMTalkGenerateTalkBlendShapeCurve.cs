@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace VRMTalk
+namespace VRMTalk.Editor
 {
     public class DefaultVRMTalkGenerateTalkBlendShapeCurve : IVRMTalkGenerateTalkBlendShapeCurve
     {
