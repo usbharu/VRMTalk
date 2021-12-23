@@ -358,11 +358,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 78040220219429358, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 689455757802743326, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
         type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: be15f62eb828c5a4e861e31d8a74120e, type: 2}
+    - target: {fileID: 800914715713964828, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1741069451961320940, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287623076811500333, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2389336321672963717, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
         type: 3}
       propertyPath: m_DirtyAABB
@@ -433,6 +453,31 @@ PrefabInstance:
       propertyPath: m_AABB.m_Extent.z
       value: 0.15919435
       objectReference: {fileID: 0}
+    - target: {fileID: 3358535282106912687, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4218779371485668370, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432643173197251586, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4465006450581395591, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5563774556604446617, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6144973027451538352, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
         type: 3}
       propertyPath: m_DirtyAABB
@@ -468,10 +513,35 @@ PrefabInstance:
       propertyPath: m_AABB.m_Extent.z
       value: 0.071035914
       objectReference: {fileID: 0}
+    - target: {fileID: 6144973027451538352, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954163865899135630, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7963457869220104876, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
         type: 3}
       propertyPath: m_Name
       value: "\u52D5\u753B\u306E\u5A18-1_"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424804267092346864, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: DrawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9077253138784969210, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9083067821593764334, guid: 9b370de17e5e1d84c9a1f7ab0b595065,
+        type: 3}
+      propertyPath: m_drawGizmo
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b370de17e5e1d84c9a1f7ab0b595065, type: 3}

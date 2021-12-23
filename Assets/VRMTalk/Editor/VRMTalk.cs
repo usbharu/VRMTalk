@@ -59,9 +59,9 @@ namespace VRMTalk
                 int vowelIndex = VRMTalkUtility.VowelIndexOf(vowel[i]);
 
                 animationCurves[vowelIndex].AddKey(nowTime , 0f);
-                nowTime += 0.5f;
+                nowTime += baseTime;
                 animationCurves[vowelIndex].AddKey(nowTime,100f);
-                nowTime += 0.2f;
+                nowTime += gapTime;
                 animationCurves[vowelIndex].AddKey(nowTime , 0f);
             }
 

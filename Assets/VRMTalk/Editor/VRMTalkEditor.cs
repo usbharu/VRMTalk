@@ -30,6 +30,9 @@ namespace VRMTalk
         //test
         private AnimationClip _animationClip; 
         //test
+
+        private TalkBlendShapeKeyName _talkBlendShapeKeyName;
+        
         [MenuItem("VRMTalk/TalkEditor")]
         private static void ShowWindow()
         {
@@ -99,6 +102,9 @@ namespace VRMTalk
             //test
             _animationClip = EditorGUILayout.ObjectField("Animation Clip",_animationClip,typeof(AnimationClip),false)as AnimationClip;
             //test
+            
+            _talkBlendShapeKeyName = EditorGUILayout.ObjectField("TalkBlendShapeKeyName",_talkBlendShapeKeyName,typeof(TalkBlendShapeKeyName),false)as TalkBlendShapeKeyName;
+            
             VRMTalkEditorUtillity.Separator();
             if (_vrmTalkClip !=null)
             {
@@ -190,12 +196,12 @@ namespace VRMTalk
         void GenerationBlendShape()
         {
             AnimationCurve[] animationCurves = new AnimationCurve[6];
-            animationCurves[0] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_A");
-            animationCurves[1] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_I");
-            animationCurves[2] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_U");
-            animationCurves[3] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_E");
-            animationCurves[4] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_MTH_O");
-            animationCurves[5] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,"Fcl_ALL_Neutral");
+            animationCurves[0] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_a);
+            animationCurves[1] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_i);
+            animationCurves[2] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_u);
+            animationCurves[3] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_e);
+            animationCurves[4] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_o);
+            animationCurves[5] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_Neutral);
             VRMTalk.GenerationTalkBlendShapeAnimationCurve(animationCurves,
                 VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
             Debug.Log("Generation BlendShape");
