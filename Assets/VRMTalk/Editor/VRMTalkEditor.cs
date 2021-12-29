@@ -20,12 +20,10 @@ namespace VRMTalk.Editor
 
         private string[] BlendShapeKeys;
         
-        private AnimationCurvePair[] _animationCurvePair = Array.Empty<AnimationCurvePair>();
+        private AnimationCurvePair[] _animationCurvePairs = Array.Empty<AnimationCurvePair>();
         //test
         private AnimationClip _animationClip; 
         //test
-
-        private IVRMTalkGenerateTalkBlendShapeCurve VrmTalkGenerateTalkBlendShapeCurve;
         
         private TalkBlendShapeKeyName _talkBlendShapeKeyName;
         
@@ -120,7 +118,7 @@ namespace VRMTalk.Editor
                 using (EditorGUILayout.ScrollViewScope scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
                 {
                     scrollPos = scrollView.scrollPosition;
-                    foreach (var t in _animationCurvePair)
+                    foreach (var t in _animationCurvePairs)
                     {
                         t.animationCurve = EditorGUILayout.CurveField(t.key,
                             t.animationCurve);
@@ -128,7 +126,8 @@ namespace VRMTalk.Editor
 
                     if (_vrmTalkClip != null)
                     {
-                        GUILayoutUtility.GetRect(_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin, 1);
+                        Debug.Log(_vrmTalkClip.clipEnd-_vrmTalkClip.clipBegin);
+                        GUILayoutUtility.GetRect((_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin)*90, 1);
                     }
                 }
             }
@@ -159,7 +158,7 @@ namespace VRMTalk.Editor
                 return;
             }
 
-            _animationCurvePair = _vrmTalkClip.animationCurveList.ToArray();
+            _animationCurvePairs = _vrmTalkClip.animationCurveList.ToArray();
         }
 
         void SaveClip()
@@ -193,20 +192,9 @@ namespace VRMTalk.Editor
 
         void GenerationBlendShape()
         {
-            AnimationCurve[] animationCurves = new AnimationCurve[6];
-            animationCurves[0] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_a);
-            animationCurves[1] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_i);
-            animationCurves[2] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_u);
-            animationCurves[3] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_e);
-            animationCurves[4] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_o);
-            animationCurves[5] = VRMTalkUtility.AnimationCurvePair(_animationCurvePair,_talkBlendShapeKeyName.key_Neutral);
-            string vowel =
-                VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript));
-            if (VrmTalkGenerateTalkBlendShapeCurve==null)
-            {
-                VrmTalkGenerateTalkBlendShapeCurve = new DefaultVRMTalkGenerateTalkBlendShapeCurve();
-            }
-            VrmTalkGenerateTalkBlendShapeCurve.GenerateTalkBlendShapeCurve(animationCurves,vowel);
+            
+            
+            VRMTalk.GenerateTalkBlendShapeCurve(_vrmTalkClip,_talkBlendShapeKeyName,_vrmTalkClip.talkScript);
             Debug.Log("Generation BlendShape");
         }
 

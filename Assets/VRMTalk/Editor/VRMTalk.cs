@@ -7,6 +7,9 @@ namespace VRMTalk.Editor
 {
     public class VRMTalk
     {
+
+        public static IVRMTalkGenerateTalkBlendShapeCurve VrmTalkGenerateTalkBlendShapeCurve;
+        
         public static void WriteBlendShapeToClip(VRMTalkClip vrmTalkClip, VRMMeta vrm)
         {
             if (vrmTalkClip==null||vrm==null)
@@ -47,30 +50,46 @@ namespace VRMTalk.Editor
          * [4] BlendShape o
          * [5] BlendShape Neutral
          * </param>
-         * <param name="vowel">生成する母音</param>
+         * <param name="scripts">生成する台本</param>
          */
-        [Obsolete]
-        public static void GenerationTalkBlendShapeAnimationCurve(AnimationCurve[] animationCurves,string vowel)
+        public static void GenerationTalkBlendShapeAnimationCurve(AnimationCurve[] animationCurves,string scripts)
         {
-            float baseTime = 0.5f;
-            float gapTime = 0.2f;
-            float nowTime = 0.1f;
-            for (int i = 0; i < vowel.Length; i++)
+            if (VrmTalkGenerateTalkBlendShapeCurve==null)
             {
-                int vowelIndex = VRMTalkUtility.VowelIndexOf(vowel[i]);
-
-                animationCurves[vowelIndex].AddKey(nowTime , 0f);
-                nowTime += baseTime;
-                animationCurves[vowelIndex].AddKey(nowTime,100f);
-                nowTime += gapTime;
-                animationCurves[vowelIndex].AddKey(nowTime , 0f);
+                VrmTalkGenerateTalkBlendShapeCurve = new DefaultVRMTalkGenerateTalkBlendShapeCurve();
             }
+            VrmTalkGenerateTalkBlendShapeCurve.GenerateTalkBlendShapeCurve(animationCurves,scripts);
+        }
 
-            //すべてのKeyFrameのTangentModeをClampedAutoに変更
-            foreach (var animationCurve in animationCurves)
+        public static void GenerateTalkBlendShapeCurve(VRMTalkClip vrmTalkClip,TalkBlendShapeKeyName talkBlendShapeKeyName,string talkScripts)
+        {
+
+            AnimationCurvePair[] animationCurvePairs = vrmTalkClip.animationCurveList.ToArray();
+            
+            AnimationCurve[] animationCurves = new AnimationCurve[6];
+            animationCurves[0] = VRMTalkUtility.KeyOfAnimationCurvePair(animationCurvePairs,talkBlendShapeKeyName.key_a);
+            animationCurves[1] = VRMTalkUtility.KeyOfAnimationCurvePair(animationCurvePairs,talkBlendShapeKeyName.key_i);
+            animationCurves[2] = VRMTalkUtility.KeyOfAnimationCurvePair(animationCurvePairs,talkBlendShapeKeyName.key_u);
+            animationCurves[3] = VRMTalkUtility.KeyOfAnimationCurvePair(animationCurvePairs,talkBlendShapeKeyName.key_e);
+            animationCurves[4] = VRMTalkUtility.KeyOfAnimationCurvePair(animationCurvePairs,talkBlendShapeKeyName.key_o);
+            animationCurves[5] = VRMTalkUtility.KeyOfAnimationCurvePair(animationCurvePairs,talkBlendShapeKeyName.key_Neutral);
+            
+            GenerationTalkBlendShapeAnimationCurve(animationCurves,talkScripts);
+
+            AnimationCurve animationCurve = VRMTalkUtility.GetLongestAnimationCurvePair(animationCurvePairs).animationCurve;
+            float maxTime = animationCurve[animationCurve.length-1].time;
+            vrmTalkClip.clipEnd = vrmTalkClip.clipBegin + maxTime;
+            Debug.Log("max time : "+maxTime);
+            
+            
+            //AnimationCurveの長さを統一
+            foreach (var animationCurvePair in vrmTalkClip.animationCurveList)
             {
-                VRMTalkUtility.ChangeAllTangentMode(animationCurve,AnimationUtility.TangentMode.ClampedAuto);
+                float lastKeyValue =
+                    animationCurvePair.animationCurve.keys[animationCurvePair.animationCurve.keys.Length-1].value;
+                animationCurvePair.animationCurve.AddKey(maxTime, lastKeyValue);
             }
+            
         }
     }
 }

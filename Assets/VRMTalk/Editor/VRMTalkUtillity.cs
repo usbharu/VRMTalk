@@ -170,7 +170,7 @@ namespace VRMTalk.Editor
             throw new ArgumentException(character+" is not vowel");
         }
 
-        public static AnimationCurve AnimationCurvePair(AnimationCurvePair[] animationCurvePairs, string key)
+        public static AnimationCurve KeyOfAnimationCurvePair(AnimationCurvePair[] animationCurvePairs, string key)
         {
             foreach (var animationCurvePair in animationCurvePairs)
             {
@@ -190,6 +190,21 @@ namespace VRMTalk.Editor
                 AnimationUtility.SetKeyLeftTangentMode(animationCurve,i,tangentMode);
                 AnimationUtility.SetKeyRightTangentMode(animationCurve,i,tangentMode);
             }
+        }
+
+        public static AnimationCurvePair GetLongestAnimationCurvePair(AnimationCurvePair[] animationCurvePairs)
+        {
+            float maxTime = 0f;
+            AnimationCurvePair animationCurvePair = new AnimationCurvePair();
+            foreach (var a in animationCurvePairs)
+            {
+                if (!(a.animationCurve[a.animationCurve.length-1].time > maxTime)) continue;
+                maxTime = a.animationCurve[a.animationCurve.length-1].time;
+                animationCurvePair = a;
+            }
+
+            return animationCurvePair;
+
         }
     }
 }

@@ -15,10 +15,11 @@ namespace VRMTalk.Editor
          * [4] BlendShape o
          * [5] BlendShape Neutral
          * </param>
-         * <param name="vowel">生成する母音</param>
+         * <param name="scripts">生成する台本</param>
          */
-        public void GenerateTalkBlendShapeCurve(AnimationCurve[] animationCurves, string vowel)
+        public void GenerateTalkBlendShapeCurve(AnimationCurve[] animationCurves, string scripts)
         {
+            string vowel = VRMTalkUtility.ConvertFromHiraganaToVowels(VRMTalkUtility.StringUnification(scripts));
             float baseTime = 0.5f;
             float gapTime = 0.2f;
             float nowTime = 0.1f;

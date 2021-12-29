@@ -15,8 +15,8 @@ namespace VRMTalk.Editor
          * [4] BlendShape o
          * [5] BlendShape Neutral
          * </param>
-         * <param name="vowel">生成する母音</param>
+         * <param name="scripts">生成する台本</param>
          */
-        void GenerateTalkBlendShapeCurve(AnimationCurve[] animationCurves, string vowel);
+        void GenerateTalkBlendShapeCurve(AnimationCurve[] animationCurves, string scripts);
     }
 }
