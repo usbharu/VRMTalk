@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using UnityLogging;
 using VRM;
 
 namespace VRMTalk.Editor
@@ -79,7 +80,7 @@ namespace VRMTalk.Editor
             AnimationCurve animationCurve = VRMTalkUtility.GetLongestAnimationCurvePair(animationCurvePairs).animationCurve;
             float maxTime = animationCurve[animationCurve.length-1].time;
             vrmTalkClip.clipEnd = vrmTalkClip.clipBegin + maxTime;
-            Debug.Log("max time : "+maxTime);
+            Logging.Log("max time : "+maxTime,"VRMTalk");
             
             
             //AnimationCurveの長さを統一

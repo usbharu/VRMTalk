@@ -196,7 +196,7 @@ namespace VRMTalk.Editor
             
             
             VRMTalk.GenerateTalkBlendShapeCurve(_vrmTalkClip,_talkBlendShapeKeyName,_vrmTalkClip.talkScript);
-            Debug.Log("Generation BlendShape");
+            Logging.Log("Generation BlendShape","VRMTalk");
         }
 
     }
