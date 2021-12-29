@@ -27,11 +27,20 @@ namespace VRMTalk.Editor
             {
                 int vowelIndex = VRMTalkUtility.VowelIndexOf(vowel[i]);
 
-                animationCurves[vowelIndex].AddKey(nowTime , 0f);
+                if (i>1 && VRMTalkUtility.VowelIndexOf(vowel[i-1])!=vowelIndex)
+                {
+                    animationCurves[vowelIndex].AddKey(nowTime , 0f);
+                }
+
                 nowTime += baseTime;
                 animationCurves[vowelIndex].AddKey(nowTime,100f);
                 nowTime += gapTime;
-                animationCurves[vowelIndex].AddKey(nowTime , 0f);
+
+                if (i<vowel.Length-1 &&VRMTalkUtility.VowelIndexOf(vowel[++i])!=vowelIndex)
+                {
+                    animationCurves[vowelIndex].AddKey(nowTime , 0f);
+                    i--;
+                }
             }
 
             //すべてのKeyFrameのTangentModeをClampedAutoに変更
