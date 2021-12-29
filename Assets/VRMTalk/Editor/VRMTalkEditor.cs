@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using UnityLogging;
 using VRM;
 
 namespace VRMTalk.Editor
@@ -126,7 +127,7 @@ namespace VRMTalk.Editor
 
                     if (_vrmTalkClip != null)
                     {
-                        Debug.Log(_vrmTalkClip.clipEnd-_vrmTalkClip.clipBegin);
+                        Logging.Log(_vrmTalkClip.clipEnd-_vrmTalkClip.clipBegin,"VRMTalk");
                         GUILayoutUtility.GetRect((_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin)*90, 1);
                     }
                 }
@@ -171,7 +172,7 @@ namespace VRMTalk.Editor
 
             EditorUtility.SetDirty(_vrmTalkClip);
             AssetDatabase.SaveAssets();
-            Debug.Log("save asset : "+ _vrmTalkClip);
+            Logging.Log("save asset : "+ _vrmTalkClip,"VRMTalk");
         }
 
         void WriteClip()
@@ -187,7 +188,7 @@ namespace VRMTalk.Editor
                 return;
             }
             VRMTalk.WriteVRMTalkClipToAnimationClip(_vrmTalkClip,_animationClip);
-            Debug.Log("write clip : "+ _animationClip);
+            Logging.Log("write clip : "+ _animationClip,"VRMTalk");
         }
 
         void GenerationBlendShape()
