@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityLogging;
@@ -31,6 +32,15 @@ namespace VRMTalk.Editor
 
         private TalkBlendShapeKeyName _talkBlendShapeKeyName;
 
+        enum Tab
+        {
+            VRM,
+            Talk,
+            Setting,
+        }
+
+        private Tab _tab = Tab.VRM;
+        
         [MenuItem("VRMTalk/TalkEditor")]
         private static void ShowWindow()
         {
@@ -47,7 +57,35 @@ namespace VRMTalk.Editor
 
         private void OnGUI()
         {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.FlexibleSpace();
+                _tab = (Tab) GUILayout.Toolbar((int) _tab, Styles.TabToggles, Styles.TabButtonStyle,
+                    Styles.TabButtonSize);
+                GUILayout.FlexibleSpace();
+            }
+
             initVRM();
+            initClip();
+            switch (_tab)
+            {
+                case Tab.VRM:
+                    showVRM();
+                    break;
+                case Tab.Talk:
+                    showClip();
+                    break;
+                case Tab.Setting:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            
+        }
+
+        void showVRM()
+        {
             using (new GUILayout.HorizontalScope())
             {
                 using (new GUILayout.VerticalScope())
@@ -105,9 +143,10 @@ namespace VRMTalk.Editor
                 GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
             }
 
-            VRMTalkEditorUtillity.Separator();
+        }
 
-            initClip();
+        void showClip()
+        {
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("New Clip (Disabled)"))
@@ -176,7 +215,7 @@ namespace VRMTalk.Editor
                 }
             }
         }
-
+        
         void initVRM()
         {
             if (vrm == null)
@@ -240,6 +279,27 @@ namespace VRMTalk.Editor
         {
             VRMTalk.GenerateTalkBlendShapeCurve(_vrmTalkClip, _talkBlendShapeKeyName, _vrmTalkClip.talkScript);
             Logging.Log("Generation BlendShape", "VRMTalk");
+        }
+
+        private static class Styles
+        {
+            private static GUIContent[] _tabToggles = null;
+
+            public static GUIContent[] TabToggles
+            {
+                get
+                {
+                    if (_tabToggles==null)
+                    {
+                        _tabToggles = System.Enum.GetNames(typeof(Tab)).Select(x => new GUIContent(x)).ToArray();
+                    }
+
+                    return _tabToggles;
+                }
+            }
+            public static GUIStyle TabButtonStyle = "LargeButton";
+                
+            public static readonly GUI.ToolbarButtonSize TabButtonSize = GUI. ToolbarButtonSize.Fixed;
         }
     }
 }
