@@ -20,7 +20,6 @@ namespace VRMTalk.Editor
         private float selectedBlendShapeWeight;
 
         private List<int> selectedBlendShapeIndexList = new List<int>();
-        // private List<float> selectedBlendShapeWeightList = new List<float>();
 
         private string[] BlendShapeKeys;
 
@@ -101,7 +100,6 @@ namespace VRMTalk.Editor
                             }
                         }
                     }
-                    // _skinnedMeshRenderer.SetBlendShapeWeight(selectedBlendShapeIndex,EditorGUILayout.Slider("BlendShapeWeight",_skinnedMeshRenderer.GetBlendShapeWeight(selectedBlendShapeIndex),0f,100f));
                 }
 
                 GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
