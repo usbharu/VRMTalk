@@ -10,7 +10,7 @@ using Assert = UnityEngine.Assertions.Assert;
 
 namespace VRMTalk
 {
-    public class VRMTalkTests
+    public class VRMTalkUtilityTests
     {
         [Test]
         public void GetBlendShapeNames_UseTestModel_IsNotNull()
@@ -100,6 +100,69 @@ namespace VRMTalk
             Assert.AreEqual(VRMTalkUtility.VowelIndexOf('え'),3);
             Assert.AreEqual(VRMTalkUtility.VowelIndexOf('お'),4);
             Assert.AreEqual(VRMTalkUtility.VowelIndexOf('ん'),5);
+        }
+
+        [Test]
+        public void KeyOfAnimationCurvePair_SimpleKey_IsPairAnimationCurve()
+        {
+            var key = "Test";
+            AnimationCurvePair[] pair = {new AnimationCurvePair()}; 
+            pair[0].key = key;
+            pair[0].animationCurve = AnimationCurve.Linear(0f,1f,1f,1f);
+
+            Assert.AreEqual(VRMTalkUtility.KeyOfAnimationCurvePair(pair, key),pair[0].animationCurve);
+        }
+
+        [Test]
+        public void KeyOfAnimationCurvePair_NoneExistentKey_IsNull()
+        {
+            var key = "Test";
+            AnimationCurvePair[] pair = {new AnimationCurvePair()}; 
+            pair[0].key = key;
+            pair[0].animationCurve = AnimationCurve.Linear(0f,1f,1f,1f);
+  
+            Assert.IsNull(VRMTalkUtility.KeyOfAnimationCurvePair(pair,"NoneExistentKey"));
+        }
+
+        [Test]
+        public void ChangeAllTangentMode_ClampedAuto_IsClampedAnyTime()
+        {
+            var curve = new AnimationCurve();
+            curve = new AnimationCurve();
+            curve.AddKey(0f, 0f);
+            curve.AddKey(0.1f, 100f);
+            curve.AddKey(0.5f, 0f);
+            curve.AddKey(1f, 100f);
+            
+            VRMTalkUtility.ChangeAllTangentMode(curve,AnimationUtility.TangentMode.ClampedAuto);
+
+            float length = curve[curve.length - 1].time;
+            float detail = 0.001f;
+
+            float fixedLength = length / detail;
+            
+            for (float i = 0; i < fixedLength; i++)
+            {
+                float value = curve.Evaluate(i*detail);
+                Assert.IsTrue(0f<=value&&100f>=value);
+            }
+        }
+
+        [Test]
+        public void GetLongestAnimationCurvePair_RandomLengthAnimationCurvePairs_IsLongestAnimationCurvePair()
+        {
+            AnimationCurvePair[] animationCurvePairs =
+            {
+                new AnimationCurvePair(),new AnimationCurvePair(),new AnimationCurvePair(),
+                new AnimationCurvePair(),new AnimationCurvePair(),new AnimationCurvePair()
+            };
+            for (int i = 0; i < animationCurvePairs.Length; i++)
+            {
+                animationCurvePairs[i].key = i.ToString();
+                animationCurvePairs[i].animationCurve = AnimationCurve.Linear(0f,1f,i,1f);
+            }
+            
+            Assert.AreEqual(VRMTalkUtility.GetLongestAnimationCurvePair(animationCurvePairs),animationCurvePairs[animationCurvePairs.Length-1]);
         }
     }
 }

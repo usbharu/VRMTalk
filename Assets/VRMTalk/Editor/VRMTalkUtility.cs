@@ -6,7 +6,7 @@ using VRM;
 
 namespace VRMTalk.Editor
 {
-    public class VRMTalkUtility
+    public static class VRMTalkUtility
     {
         public static string[] GetBlendShapeNames(VRMMeta vrm)
         {
