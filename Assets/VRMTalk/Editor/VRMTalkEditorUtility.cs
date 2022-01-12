@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace VRMTalk.Editor
 {
-    public class VRMTalkEditorUtillity
+    public static class VRMTalkEditorUtility
     {
         [Obsolete]
         public static void Separator(EditorWindow editorWindow)

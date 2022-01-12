@@ -180,7 +180,7 @@ namespace VRMTalk.Editor
                 EditorGUILayout.ObjectField("TalkBlendShapeKeyName", _talkBlendShapeKeyName,
                     typeof(TalkBlendShapeKeyName), false) as TalkBlendShapeKeyName;
 
-            VRMTalkEditorUtillity.Separator();
+            VRMTalkEditorUtility.Separator();
             if (_vrmTalkClip != null)
             {
                 using (new EditorGUILayout.VerticalScope())
