@@ -8,6 +8,6 @@
     "name": "usbharu"
   },
   "dependencies": {
-    
+    "com.vrmc.vrm": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM10#v0.93.0"
   }
 }
