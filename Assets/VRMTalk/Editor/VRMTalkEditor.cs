@@ -32,6 +32,12 @@ namespace VRMTalk.Editor
 
         private TalkBlendShapeKeyName _talkBlendShapeKeyName;
 
+        private EditorGUISplitView _splitView = new EditorGUISplitView(EditorGUISplitView.Direction.Horizontal);
+
+        private float splitPosition = 0.8f;
+        private Rect rect;
+        private bool resize;
+        private Vector2 vrmScrollPosition;
         enum Tab
         {
             VRM,
@@ -76,6 +82,7 @@ namespace VRMTalk.Editor
                     showClip();
                     break;
                 case Tab.Setting:
+                    showSetting();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -84,9 +91,20 @@ namespace VRMTalk.Editor
             
         }
 
+        void  showSetting()
+        {
+            _splitView.BeginSplitView();
+            GUILayout.Label("view1");
+            _splitView.Split();
+            GUILayout.Label("view1");
+
+            _splitView.EndSplitView();
+            Repaint();
+        }
+
         void showVRM()
         {
-            using (new GUILayout.HorizontalScope())
+            using (var split = new EditorGUISplitViewScope(EditorGUISplitViewScope.Direction.Horizontal,splitPosition,rect,resize,vrmScrollPosition))
             {
                 using (new GUILayout.VerticalScope())
                 {
@@ -139,9 +157,14 @@ namespace VRMTalk.Editor
                         }
                     }
                 }
-
+                split.Split();
+                rect = split.availableRect;
+                splitPosition = split.splitNormalizedPosition;
+                resize = split.resize;
+                vrmScrollPosition = split.scrollPosition;
                 GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
             }
+            Repaint();
 
         }
 

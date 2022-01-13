@@ -20,17 +20,16 @@ namespace VRMTalk.Editor
 		public Rect availableRect;
 
 
-		public EditorGUISplitViewScope(Direction splitDirection,float splitPosition,Rect availableRect,bool resize) {
-			Logging.Log(splitPosition,"Editor SplitView");
+		public EditorGUISplitViewScope(Direction splitDirection,float splitPosition,Rect availableRect,bool resize,Vector2 scrollPosition) {
 			this.splitNormalizedPosition = splitPosition;
 			this.resize = resize;
 			this.availableRect = availableRect;
 			this.splitDirection = splitDirection;
+			this.scrollPosition = scrollPosition;
 			BeginSplitView();
 		}
 
 		public Rect BeginSplitView() {
-			Logging.Log("BeginSplitView","Editor SplitView");
 			Rect tempRect;
 
 			if(splitDirection == Direction.Horizontal)
