@@ -1,0 +1,10 @@
+﻿{
+  "name": "io.github.usbharu.vrmtalk",
+  "displayName": "VRMTalk",
+  "version": "0.0.1",
+  "unity": "2019.4",
+  "description": "A set of tools to make VRM talk.",
+  "dependencies": {
+    "com.vrmc.univrm": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM10#v0.93.0"
+  }
+}
