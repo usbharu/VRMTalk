@@ -34,6 +34,9 @@ namespace VRMTalk.Editor
 
         private EditorGUISplitView _splitView = new EditorGUISplitView(EditorGUISplitView.Direction.Horizontal);
 
+        private bool initVrm;
+        private bool initVRMClip;
+        
         private float splitPosition = 0.8f;
         private Rect rect;
         private bool resize;
@@ -246,6 +249,13 @@ namespace VRMTalk.Editor
                 return;
             }
 
+            if (initVrm)
+            {
+                return;
+            }
+
+            initVrm = true;
+
             VrmMeta = vrm.GetComponent<VRMMeta>().Meta;
             thumbnail = VrmMeta.Thumbnail;
 
@@ -264,6 +274,12 @@ namespace VRMTalk.Editor
                 return;
             }
 
+            if (initVRMClip)
+            {
+                return;
+            }
+
+            initVRMClip = true;
             _animationCurvePairs = _vrmTalkClip.animationCurveList.ToArray();
         }
 
