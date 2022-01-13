@@ -1,7 +1,6 @@
-﻿{
-  "name": "io.github.usbharu.vrmtalk",
+{"name": "io.github.usbharu.vrmtalk",
   "displayName": "VRMTalk",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "A set of tools to make VRM talk.",
   "unity": "2019.4",
   "keywords": ["vrm,talk"],
