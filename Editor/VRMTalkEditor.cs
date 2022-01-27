@@ -15,6 +15,7 @@ namespace VRMTalk.Editor
         private VRMMetaObject VrmMeta;
         private Texture2D thumbnail;
         private Vector2 scrollPos;
+        private Vector2 scrollPos2;
         private SkinnedMeshRenderer _skinnedMeshRenderer;
 
         private int selectedBlendShapeIndex;
@@ -32,12 +33,9 @@ namespace VRMTalk.Editor
 
         private TalkBlendShapeKeyName _talkBlendShapeKeyName;
 
-        private EditorGUISplitView _splitView = new EditorGUISplitView(EditorGUISplitView.Direction.Horizontal);
-
         private bool initVrm;
         private bool initVRMClip;
         
-        private float splitPosition = 0.8f;
         private Rect rect;
         private bool resize;
         private Vector2 vrmScrollPosition;
@@ -45,7 +43,6 @@ namespace VRMTalk.Editor
         {
             VRM,
             Talk,
-            Setting,
         }
 
         private Tab _tab = Tab.VRM;
@@ -76,38 +73,28 @@ namespace VRMTalk.Editor
 
             initVRM();
             initClip();
-            switch (_tab)
+            using (new EditorGUILayout.HorizontalScope())
             {
-                case Tab.VRM:
-                    showVRM();
-                    break;
-                case Tab.Talk:
-                    showClip();
-                    break;
-                case Tab.Setting:
-                    showSetting();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (_tab)
+                {
+                    case Tab.VRM:
+                        showVRM();
+                        break;
+                    case Tab.Talk:
+                        showClip();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                thumbnail = VrmMeta.Thumbnail;
+                GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
             }
-
-            
-        }
-
-        void  showSetting()
-        {
-            _splitView.BeginSplitView();
-            GUILayout.Label("view1");
-            _splitView.Split();
-            GUILayout.Label("view1");
-
-            _splitView.EndSplitView();
-            Repaint();
         }
 
         void showVRM()
         {
-            using (var split = new EditorGUISplitViewScope(EditorGUISplitViewScope.Direction.Horizontal,splitPosition,rect,resize,vrmScrollPosition))
+            using (new EditorGUILayout.HorizontalScope())
             {
                 using (new GUILayout.VerticalScope())
                 {
@@ -118,16 +105,26 @@ namespace VRMTalk.Editor
                         VRMTalk.WriteBlendShapeToClip(_vrmTalkClip, vrm);
                         SaveClip();
                     }
-
+                    selectedBlendShapeIndex =
+                        EditorGUILayout.Popup("Preview BlendShape", selectedBlendShapeIndex, BlendShapeKeys);
                     using (new GUILayout.HorizontalScope())
                     {
-                        selectedBlendShapeIndex =
-                            EditorGUILayout.Popup("Preview BlendShape", selectedBlendShapeIndex, BlendShapeKeys);
                         if (GUILayout.Button("Add") && !selectedBlendShapeIndexList.Contains(selectedBlendShapeIndex))
                         {
                             selectedBlendShapeIndexList.Add(selectedBlendShapeIndex);
                         }
 
+                        if (GUILayout.Button("Add all"))
+                        {
+                            for (var index = 0; index < BlendShapeKeys.Length; index++)
+                            {
+                                var i = BlendShapeKeys[index];
+                                if (!selectedBlendShapeIndexList.Contains(index))
+                                {
+                                    selectedBlendShapeIndexList.Add(index);
+                                }
+                            }
+                        }
                         if (GUILayout.Button("Clear"))
                         {
                             selectedBlendShapeIndexList.Clear();
@@ -144,100 +141,96 @@ namespace VRMTalk.Editor
 
                     using (new EditorGUI.IndentLevelScope())
                     {
-                        for (var i = 0; i < selectedBlendShapeIndexList.Count; i++)
+                        using (var view = new GUILayout.ScrollViewScope(scrollPos2))
                         {
-                            using (new GUILayout.HorizontalScope())
+                            scrollPos2 = view.scrollPosition;
+                            for (var i = 0; i < selectedBlendShapeIndexList.Count; i++)
                             {
-                                _skinnedMeshRenderer.SetBlendShapeWeight(selectedBlendShapeIndexList[i],
-                                    EditorGUILayout.Slider(BlendShapeKeys[selectedBlendShapeIndexList[i]],
-                                        _skinnedMeshRenderer.GetBlendShapeWeight(selectedBlendShapeIndexList[i]), 0f,
-                                        100f));
-                                if (GUILayout.Button("Remove"))
+                                using (new GUILayout.HorizontalScope())
                                 {
-                                    selectedBlendShapeIndexList.Remove(selectedBlendShapeIndexList[i]);
+                                    _skinnedMeshRenderer.SetBlendShapeWeight(selectedBlendShapeIndexList[i],
+                                        EditorGUILayout.Slider(BlendShapeKeys[selectedBlendShapeIndexList[i]],
+                                            _skinnedMeshRenderer.GetBlendShapeWeight(selectedBlendShapeIndexList[i]), 0f,
+                                            100f));
+                                    if (GUILayout.Button("Remove"))
+                                    {
+                                        selectedBlendShapeIndexList.Remove(selectedBlendShapeIndexList[i]);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                split.Split();
-                rect = split.availableRect;
-                splitPosition = split.splitNormalizedPosition;
-                resize = split.resize;
-                vrmScrollPosition = split.scrollPosition;
-                thumbnail = VrmMeta.Thumbnail;
-                GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
             }
-            Repaint();
 
         }
 
         void showClip()
         {
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                if (GUILayout.Button("New Clip (Disabled)"))
-                {
-                }
-
-                if (GUILayout.Button("Save Clip"))
-                {
-                    SaveClip();
-                }
-
-                if (GUILayout.Button("Save As Clip (Disabled)"))
-                {
-                }
-
-                if (GUILayout.Button("WriteClip"))
-                {
-                    WriteClip();
-                }
-            }
-
-            _vrmTalkClip = EditorGUILayout.ObjectField("Clip", _vrmTalkClip, typeof(VRMTalkClip), true) as VRMTalkClip;
-
-            //test
-            _animationClip =
-                EditorGUILayout.ObjectField("Animation Clip", _animationClip, typeof(AnimationClip), false) as
-                    AnimationClip;
-            //test
-
-            _talkBlendShapeKeyName =
-                EditorGUILayout.ObjectField("TalkBlendShapeKeyName", _talkBlendShapeKeyName,
-                    typeof(TalkBlendShapeKeyName), false) as TalkBlendShapeKeyName;
-
-            VRMTalkEditorUtility.Separator();
-            if (_vrmTalkClip != null)
-            {
-                using (new EditorGUILayout.VerticalScope())
-                {
-                    _vrmTalkClip.talkScript = EditorGUILayout.TextField("talk script", _vrmTalkClip.talkScript);
-                    EditorGUILayout.LabelField(
-                        VRMTalkUtility.ConvertFromHiraganaToVowels(
-                            VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
-                    if (GUILayout.Button("Generation"))
-                    {
-                        GenerationBlendShape();
-                    }
-                }
-            }
-
             using (new EditorGUILayout.VerticalScope())
             {
-                using (EditorGUILayout.ScrollViewScope scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    scrollPos = scrollView.scrollPosition;
-                    foreach (var t in _animationCurvePairs)
+                    if (GUILayout.Button("New Clip (Disabled)"))
                     {
-                        t.animationCurve = EditorGUILayout.CurveField(t.key,
-                            t.animationCurve);
                     }
 
-                    if (_vrmTalkClip != null)
+                    if (GUILayout.Button("Save Clip"))
                     {
-                        Logging.Log(_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin, "VRMTalk");
-                        GUILayoutUtility.GetRect((_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin) * 90, 1);
+                        SaveClip();
+                    }
+
+                    if (GUILayout.Button("Save As Clip (Disabled)"))
+                    {
+                    }
+
+                    if (GUILayout.Button("WriteClip"))
+                    {
+                        WriteClip();
+                    }
+                }
+
+                _vrmTalkClip = EditorGUILayout.ObjectField("Clip", _vrmTalkClip, typeof(VRMTalkClip), true) as VRMTalkClip;
+                //test
+                _animationClip =
+                    EditorGUILayout.ObjectField("Animation Clip", _animationClip, typeof(AnimationClip), false) as
+                        AnimationClip;
+                //test
+                _talkBlendShapeKeyName =
+                    EditorGUILayout.ObjectField("TalkBlendShapeKeyName", _talkBlendShapeKeyName,
+                        typeof(TalkBlendShapeKeyName), false) as TalkBlendShapeKeyName;
+                VRMTalkEditorUtility.Separator();
+                if (_vrmTalkClip != null)
+                {
+                    using (new EditorGUILayout.VerticalScope())
+                    {
+                        _vrmTalkClip.talkScript = EditorGUILayout.TextField("talk script", _vrmTalkClip.talkScript);
+                        EditorGUILayout.LabelField(
+                            VRMTalkUtility.ConvertFromHiraganaToVowels(
+                                VRMTalkUtility.StringUnification(_vrmTalkClip.talkScript)));
+                        if (GUILayout.Button("Generation"))
+                        {
+                            GenerationBlendShape();
+                        }
+                    }
+                }
+
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    using (EditorGUILayout.ScrollViewScope scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
+                    {
+                        scrollPos = scrollView.scrollPosition;
+                        foreach (var t in _animationCurvePairs)
+                        {
+                            t.animationCurve = EditorGUILayout.CurveField(t.key,
+                                t.animationCurve);
+                        }
+
+                        if (_vrmTalkClip != null)
+                        {
+                            Logging.Log(_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin, "VRMTalk");
+                            GUILayoutUtility.GetRect((_vrmTalkClip.clipEnd - _vrmTalkClip.clipBegin) * 90, 1);
+                        }
                     }
                 }
             }
