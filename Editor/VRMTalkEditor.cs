@@ -112,7 +112,7 @@ namespace VRMTalk.Editor
                 using (new GUILayout.VerticalScope())
                 {
                     vrm = EditorGUILayout.ObjectField("VRM", vrm, typeof(VRMMeta), true) as VRMMeta;
-                    VrmMeta = EditorGUILayout.ObjectField("VRMMeta", VrmMeta, typeof(VRMMeta), true) as VRMMetaObject;
+                    VrmMeta = EditorGUILayout.ObjectField("VRMMeta", VrmMeta, typeof(VRMMetaObject), true) as VRMMetaObject;
                     if (GUILayout.Button("Write BlendShape"))
                     {
                         VRMTalk.WriteBlendShapeToClip(_vrmTalkClip, vrm);
@@ -165,6 +165,7 @@ namespace VRMTalk.Editor
                 splitPosition = split.splitNormalizedPosition;
                 resize = split.resize;
                 vrmScrollPosition = split.scrollPosition;
+                thumbnail = VrmMeta.Thumbnail;
                 GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
             }
             Repaint();
@@ -256,8 +257,9 @@ namespace VRMTalk.Editor
 
             initVrm = true;
 
+            Logging.Log("Init VRM","VRMTalk");
+            
             VrmMeta = vrm.GetComponent<VRMMeta>().Meta;
-            thumbnail = VrmMeta.Thumbnail;
 
             _skinnedMeshRenderer = vrm.GetComponentInChildren<SkinnedMeshRenderer>();
             BlendShapeKeys = new string[_skinnedMeshRenderer.sharedMesh.blendShapeCount];

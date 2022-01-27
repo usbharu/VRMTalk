@@ -1,4 +1,5 @@
-{"name": "io.github.usbharu.vrmtalk",
+{
+  "name": "io.github.usbharu.vrmtalk",
   "displayName": "VRMTalk",
   "version": "0.1.1",
   "description": "A set of tools to make VRM talk.",
@@ -8,6 +9,9 @@
     "name": "usbharu"
   },
   "dependencies": {
-    "com.vrmc.vrm": "0.92.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usbharu/VRMTalk.git"
   }
 }
