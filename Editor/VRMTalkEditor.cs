@@ -71,37 +71,45 @@ namespace VRMTalk.Editor
         {
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUILayout.FlexibleSpace();
-                _tab = (Tab) GUILayout.Toolbar((int) _tab, Styles.TabToggles, Styles.TabButtonStyle,
-                    Styles.TabButtonSize);
-                GUILayout.FlexibleSpace();
-            }
-
-            initVRM();
-            initClip();
-            initPreview();
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                switch (_tab)
+                using (new EditorGUILayout.VerticalScope())
                 {
-                    case Tab.VRM:
-                        showVRM();
-                        break;
-                    case Tab.Talk:
-                        showClip();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        GUILayout.FlexibleSpace();
+                        _tab = (Tab) GUILayout.Toolbar((int) _tab, Styles.TabToggles, Styles.TabButtonStyle,
+                            Styles.TabButtonSize);
+                        GUILayout.FlexibleSpace();
+                    }
+
+                    initVRM();
+                    initClip();
+                    initPreview();
+                    switch (_tab)
+                    {
+                        case Tab.VRM:
+                            showVRM();
+                            break;
+                        case Tab.Talk:
+                            showClip();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
                 
                 showPreview();
                 // thumbnail = VrmMeta.Thumbnail;
-                GUILayout.Box(thumbnail, GUILayout.Width(position.width*0.3f));
+                GUILayout.Box(thumbnail,GUILayout.Height(position.height),GUILayout.Width(position.width*0.3f));
             }
         }
 
         void showVRM()
         {
+            if (_skinnedMeshRenderer==null)
+            {
+                isInitVrm=false;
+                return;
+            }
             using (new EditorGUILayout.HorizontalScope())
             {
                 using (new GUILayout.VerticalScope())
@@ -165,7 +173,7 @@ namespace VRMTalk.Editor
                                         EditorGUILayout.Slider(BlendShapeKeys[selectedBlendShapeIndexList[i]],
                                             _skinnedMeshRenderer.GetBlendShapeWeight(selectedBlendShapeIndexList[i]), 0f,
                                             100f));
-                                    if (GUILayout.Button("Remove"))
+                                    if (GUILayout.Button("Remove",GUILayout.ExpandWidth(false)))
                                     {
                                         selectedBlendShapeIndexList.Remove(selectedBlendShapeIndexList[i]);
                                     }
@@ -264,6 +272,8 @@ namespace VRMTalk.Editor
 
             if (previewGameObject!=null)
             {
+                gameObjectPreview.drawRect.width = position.width * 0.3f;
+                gameObjectPreview.drawRect.height = position.height;
                 thumbnail = gameObjectPreview.CreatePreviewTexture(previewGameObject);
             }
         }
