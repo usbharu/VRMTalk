@@ -98,8 +98,6 @@ namespace VRMTalk.Editor
                 }
                 
                 showPreview();
-                // thumbnail = VrmMeta.Thumbnail;
-                GUILayout.Box(thumbnail,GUILayout.Height(position.height),GUILayout.Width(position.width*0.3f));
             }
         }
 
@@ -259,22 +257,46 @@ namespace VRMTalk.Editor
 
         void showPreview()
         {
-            if (gameObjectPreview==null)
+            using (new EditorGUILayout.VerticalScope())
             {
-                isInitPreview = false;
-                return;
-            }
-            if (isChangeVRM|| (previewGameObject == null && vrm != null))
-            {
-                DestroyImmediate(previewGameObject);
-                previewGameObject = Instantiate(vrm.gameObject);
-            }
+                if (GUILayout.Button("Reset"))
+                {
+                    gameObjectPreview.camera.transform.position = new Vector3(0, 1f, -2f);
+                }
 
-            if (previewGameObject!=null)
-            {
-                gameObjectPreview.drawRect.width = position.width * 0.3f;
-                gameObjectPreview.drawRect.height = position.height;
-                thumbnail = gameObjectPreview.CreatePreviewTexture(previewGameObject);
+                if (gameObjectPreview==null)
+                {
+                    isInitPreview = false;
+                    GUILayout.Box(thumbnail,GUILayout.Height(position.height),GUILayout.Width(position.width*0.3f));
+                    return;
+                }
+
+                if (isChangeVRM|| (previewGameObject == null && vrm != null))
+                {
+                    DestroyImmediate(previewGameObject);
+                    previewGameObject = Instantiate(vrm.gameObject);
+                }
+
+                Vector3 drag = Vector2.zero;
+                if (previewGameObject!=null)
+                {
+                    if (Event.current.type == EventType.MouseDrag)
+                    {
+                        drag = new Vector3(-Event.current.delta.x, Event.current.delta.y);
+                        gameObjectPreview.camera.transform.position += drag/500;
+                        if (drag!=Vector3.zero)
+                        {
+                            Repaint();
+                        }
+                    }
+                
+                
+                    gameObjectPreview.drawRect.width = position.width * 0.3f;
+                    gameObjectPreview.drawRect.height = position.height;
+                    thumbnail = gameObjectPreview.CreatePreviewTexture(previewGameObject);
+                }
+
+                GUILayout.Box(thumbnail,GUILayout.Height(position.height),GUILayout.Width(position.width*0.3f));
             }
         }
         

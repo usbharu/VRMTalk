@@ -9,6 +9,7 @@ namespace VRMTalk.Editor
 
         private PreviewRenderUtility previewRenderUtility;
         public Rect drawRect = new Rect(0, 0, 512, 512);
+        public Camera camera;
         public GameObjectPreview()
         {
             init();
@@ -25,7 +26,7 @@ namespace VRMTalk.Editor
             previewRenderUtility = new PreviewRenderUtility(true);
             System.GC.SuppressFinalize(previewRenderUtility);
             previewRenderUtility.ambientColor = RenderSettings.ambientLight;
-            var camera = previewRenderUtility.camera;
+            camera = previewRenderUtility.camera;
             camera.fieldOfView = 30f;
             camera.nearClipPlane = 0.3f;
             camera.farClipPlane = 1000;
