@@ -289,6 +289,15 @@ namespace VRMTalk.Editor
                             Repaint();
                         }
                     }
+
+                    if (Event.current.type == EventType.ScrollWheel)
+                    {
+                        gameObjectPreview.camera.transform.position += new Vector3(0, 0, -Event.current.delta.y/100);
+                        if (Event.current.delta!=Vector2.zero)
+                        {
+                            Repaint();
+                        }
+                    }
                 
                 
                     gameObjectPreview.drawRect.width = position.width * 0.3f;
@@ -296,7 +305,7 @@ namespace VRMTalk.Editor
                     thumbnail = gameObjectPreview.CreatePreviewTexture(previewGameObject);
                 }
 
-                GUILayout.Box(thumbnail,GUILayout.Height(position.height),GUILayout.Width(position.width*0.3f));
+                GUILayout.Box(thumbnail,GUILayout.Height(position.height-25),GUILayout.Width(position.width*0.3f));
             }
         }
         
