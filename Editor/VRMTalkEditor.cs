@@ -13,7 +13,7 @@ namespace VRMTalk.Editor
         private VRMTalkClip _vrmTalkClip;
         private VRMMeta vrm;
         private VRMMetaObject VrmMeta;
-        private Texture2D thumbnail;
+        private Texture thumbnail;
         private Vector2 scrollPos;
         private Vector2 scrollPos2;
         private SkinnedMeshRenderer _skinnedMeshRenderer;
@@ -33,12 +33,18 @@ namespace VRMTalk.Editor
 
         private TalkBlendShapeKeyName _talkBlendShapeKeyName;
 
-        private bool initVrm;
-        private bool initVRMClip;
+        private bool isInitVrm;
+        private bool isInitVRMClip;
+        private bool isInitPreview;
+        
+        private bool isChangeVRM;
         
         private Rect rect;
         private bool resize;
         private Vector2 vrmScrollPosition;
+
+        private GameObjectPreview gameObjectPreview;
+        private GameObject previewGameObject;
         enum Tab
         {
             VRM,
@@ -73,6 +79,7 @@ namespace VRMTalk.Editor
 
             initVRM();
             initClip();
+            initPreview();
             using (new EditorGUILayout.HorizontalScope())
             {
                 switch (_tab)
@@ -86,9 +93,10 @@ namespace VRMTalk.Editor
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                thumbnail = VrmMeta.Thumbnail;
-                GUILayout.Box(thumbnail, GUILayout.Width(150f), GUILayout.Height(150f));
+                
+                showPreview();
+                // thumbnail = VrmMeta.Thumbnail;
+                GUILayout.Box(thumbnail, GUILayout.Width(position.width*0.3f));
             }
         }
 
@@ -98,7 +106,12 @@ namespace VRMTalk.Editor
             {
                 using (new GUILayout.VerticalScope())
                 {
-                    vrm = EditorGUILayout.ObjectField("VRM", vrm, typeof(VRMMeta), true) as VRMMeta;
+                    using (var changeCheckScope = new EditorGUI.ChangeCheckScope())
+                    {
+                        isChangeVRM = changeCheckScope.changed;
+                        vrm = EditorGUILayout.ObjectField("VRM", vrm, typeof(VRMMeta), true) as VRMMeta;
+                    }
+
                     VrmMeta = EditorGUILayout.ObjectField("VRMMeta", VrmMeta, typeof(VRMMetaObject), true) as VRMMetaObject;
                     if (GUILayout.Button("Write BlendShape"))
                     {
@@ -235,6 +248,25 @@ namespace VRMTalk.Editor
                 }
             }
         }
+
+        void showPreview()
+        {
+            if (gameObjectPreview==null)
+            {
+                isInitPreview = false;
+                return;
+            }
+            if (isChangeVRM|| (previewGameObject == null && vrm != null))
+            {
+                DestroyImmediate(previewGameObject);
+                previewGameObject = Instantiate(vrm.gameObject);
+            }
+
+            if (previewGameObject!=null)
+            {
+                thumbnail = gameObjectPreview.CreatePreviewTexture(previewGameObject);
+            }
+        }
         
         void initVRM()
         {
@@ -243,12 +275,12 @@ namespace VRMTalk.Editor
                 return;
             }
 
-            if (initVrm)
+            if (isInitVrm)
             {
                 return;
             }
 
-            initVrm = true;
+            isInitVrm = true;
 
             Logging.Log("Init VRM","VRMTalk");
             
@@ -269,15 +301,26 @@ namespace VRMTalk.Editor
                 return;
             }
 
-            if (initVRMClip)
+            if (isInitVRMClip)
             {
                 return;
             }
 
-            initVRMClip = true;
+            isInitVRMClip = true;
             _animationCurvePairs = _vrmTalkClip.animationCurveList.ToArray();
         }
 
+        void initPreview()
+        {
+            if (isInitPreview)
+            {
+                return;
+            }
+            isInitPreview = true;
+            gameObjectPreview = new GameObjectPreview();
+            
+        }
+        
         void SaveClip()
         {
             if (_vrmTalkClip == null)
@@ -334,6 +377,11 @@ namespace VRMTalk.Editor
             public static GUIStyle TabButtonStyle = "LargeButton";
                 
             public static readonly GUI.ToolbarButtonSize TabButtonSize = GUI. ToolbarButtonSize.Fixed;
+        }
+
+        private void OnDisable()
+        {
+            gameObjectPreview.Cleanup();
         }
     }
 }
